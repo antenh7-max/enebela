@@ -1,0 +1,735 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>BrewLink — Connect with Cafés Near You</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <script src="https://code.iconify.design/3/3.1.0/iconify.min.js"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: { sans: ['Inter', 'sans-serif'] },
+        }
+      }
+    }
+  </script>
+  <style>
+    * { -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; }
+    ::-webkit-scrollbar { width: 6px; }
+    ::-webkit-scrollbar-track { background: #09090b; }
+    ::-webkit-scrollbar-thumb { background: #27272a; border-radius: 3px; }
+    ::-webkit-scrollbar-thumb:hover { background: #3f3f46; }
+    .glass-panel { background: rgba(24,24,27,0.6); backdrop-filter: blur(12px); border: 1px solid rgba(255,255,255,0.08); }
+    .hero-bg { background: radial-gradient(circle at 50% 0%, #27272a 0%, #09090b 40%); }
+    .cafe-card:hover .cafe-img { transform: scale(1.05); opacity: 0.8; }
+    .cafe-card:hover .cafe-title { transform: translateY(0); }
+    .cafe-card .cafe-title { transform: translateY(8px); transition: transform 300ms ease; }
+    .step-number { background: linear-gradient(135deg, #facc15, #ca8a04); }
+  </style>
+</head>
+<body class="bg-[#09090b] text-white font-sans">
+
+  <!-- ============ NAVBAR ============ -->
+  <nav id="navbar" class="fixed top-0 left-0 right-0 z-50 h-16 flex items-center px-6 transition-all duration-300" style="background:rgba(9,9,11,0.8);backdrop-filter:blur(12px);border-bottom:1px solid rgba(255,255,255,0.05);">
+    <div class="max-w-7xl mx-auto w-full flex items-center justify-between">
+      <!-- Logo -->
+      <a href="#" class="flex items-center gap-2">
+        <span class="iconify text-yellow-400 text-2xl" data-icon="lucide:coffee"></span>
+        <span class="text-white font-semibold text-lg tracking-tight">BrewLink</span>
+      </a>
+      <!-- Desktop Menu -->
+      <div class="hidden md:flex items-center gap-8">
+        <a href="#how-it-works" class="text-zinc-400 hover:text-white transition-colors text-sm">How It Works</a>
+        <a href="#cafes" class="text-zinc-400 hover:text-white transition-colors text-sm">Explore Cafés</a>
+        <a href="#for-owners" class="text-zinc-400 hover:text-white transition-colors text-sm">For Owners</a>
+        <a href="#testimonials" class="text-zinc-400 hover:text-white transition-colors text-sm">Reviews</a>
+      </div>
+      <!-- CTA Buttons -->
+      <div class="hidden md:flex items-center gap-3">
+        <button onclick="openModal('login')" class="text-zinc-400 hover:text-white transition-colors text-sm px-4 py-2">Log In</button>
+        <button onclick="openModal('signup')" class="bg-white text-[#09090b] text-xs font-medium px-4 py-2 rounded-lg hover:bg-zinc-200 transition-colors">Sign Up Free</button>
+      </div>
+      <!-- Mobile Toggle -->
+      <button id="mobileToggle" onclick="toggleMobile()" class="md:hidden text-zinc-400 hover:text-white transition-colors">
+        <span class="iconify text-2xl" data-icon="lucide:menu" id="menuIcon"></span>
+      </button>
+    </div>
+  </nav>
+
+  <!-- Mobile Menu -->
+  <div id="mobileMenu" class="fixed inset-0 z-40 bg-[#09090b]/95 backdrop-blur-md flex flex-col items-center justify-center gap-6 hidden">
+    <a href="#how-it-works" onclick="toggleMobile()" class="text-zinc-300 hover:text-white text-lg transition-colors">How It Works</a>
+    <a href="#cafes" onclick="toggleMobile()" class="text-zinc-300 hover:text-white text-lg transition-colors">Explore Cafés</a>
+    <a href="#for-owners" onclick="toggleMobile()" class="text-zinc-300 hover:text-white text-lg transition-colors">For Owners</a>
+    <a href="#testimonials" onclick="toggleMobile()" class="text-zinc-300 hover:text-white text-lg transition-colors">Reviews</a>
+    <div class="flex gap-3 mt-4">
+      <button onclick="openModal('login');toggleMobile()" class="text-zinc-400 border border-zinc-700 px-5 py-2.5 rounded-lg text-sm hover:border-zinc-500 transition-colors">Log In</button>
+      <button onclick="openModal('signup');toggleMobile()" class="bg-white text-[#09090b] text-sm font-medium px-5 py-2.5 rounded-lg hover:bg-zinc-200 transition-colors">Sign Up Free</button>
+    </div>
+  </div>
+
+  <!-- ============ HERO ============ -->
+  <section class="hero-bg min-h-screen flex items-center justify-center pt-16 relative overflow-hidden">
+    <!-- Decorative glow -->
+    <div class="absolute top-20 left-1/2 -translate-x-1/2 w-[600px] h-[400px] bg-yellow-500/5 blur-[120px] rounded-full pointer-events-none"></div>
+
+    <div class="max-w-7xl mx-auto px-6 text-center relative z-10 py-24">
+      <!-- Badge -->
+      <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-yellow-500/20 bg-yellow-500/5 mb-8">
+        <span class="w-2 h-2 rounded-full bg-yellow-400 animate-pulse"></span>
+        <span class="text-yellow-400 text-xs font-medium uppercase tracking-widest">Now in 50+ cities</span>
+      </div>
+
+      <h1 class="text-5xl md:text-7xl font-medium tracking-tight leading-[1.1] mb-6">
+        Discover your<br>
+        <span class="text-yellow-400">perfect café</span>
+      </h1>
+      <p class="text-zinc-400 text-lg md:text-xl font-light leading-relaxed max-w-2xl mx-auto mb-10">
+        Browse cafés, check real-time availability, reserve tables, and order ahead — all from one beautifully simple platform.
+      </p>
+
+      <!-- Search Bar -->
+      <div class="max-w-xl mx-auto flex flex-col sm:flex-row gap-3 mb-12">
+        <div class="flex-1 relative">
+          <span class="iconify absolute left-4 top-1/2 -translate-y-1/2 text-zinc-500" data-icon="lucide:map-pin"></span>
+          <input id="heroSearch" type="text" placeholder="Enter your city or neighborhood..." class="w-full bg-zinc-900/80 border border-zinc-800 rounded-xl pl-11 pr-4 py-3.5 text-sm text-white placeholder-zinc-500 focus:outline-none focus:border-yellow-500/50 transition-colors">
+        </div>
+        <button onclick="handleSearch()" class="bg-white text-[#09090b] text-sm font-medium px-6 py-3.5 rounded-xl hover:bg-zinc-200 transition-colors flex items-center justify-center gap-2 shrink-0">
+          <span class="iconify" data-icon="lucide:search"></span>
+          Explore
+        </button>
+      </div>
+
+      <!-- Search feedback -->
+      <div id="searchFeedback" class="hidden max-w-xl mx-auto mb-8"></div>
+
+      <!-- Stats -->
+      <div class="flex flex-wrap justify-center gap-8 md:gap-16">
+        <div class="text-center">
+          <div class="text-2xl md:text-3xl font-medium text-white">2,400+</div>
+          <div class="text-xs text-zinc-500 uppercase tracking-widest mt-1">Cafés Listed</div>
+        </div>
+        <div class="text-center">
+          <div class="text-2xl md:text-3xl font-medium text-white">180K+</div>
+          <div class="text-xs text-zinc-500 uppercase tracking-widest mt-1">Happy Customers</div>
+        </div>
+        <div class="text-center">
+          <div class="text-2xl md:text-3xl font-medium text-white">4.8</div>
+          <div class="text-xs text-zinc-500 uppercase tracking-widest mt-1">Avg. Rating</div>
+        </div>
+        <div class="text-center">
+          <div class="text-2xl md:text-3xl font-medium text-white">50+</div>
+          <div class="text-xs text-zinc-500 uppercase tracking-widest mt-1">Cities</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Scroll indicator -->
+    <div class="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 animate-bounce">
+      <span class="text-zinc-600 text-xs">Scroll</span>
+      <span class="iconify text-zinc-600" data-icon="lucide:chevron-down"></span>
+    </div>
+  </section>
+
+  <!-- ============ HOW IT WORKS ============ -->
+  <section id="how-it-works" class="py-24 px-6">
+    <div class="max-w-7xl mx-auto">
+      <div class="text-center mb-16">
+        <span class="text-yellow-400 text-xs font-medium uppercase tracking-widest">Simple & Fast</span>
+        <h2 class="text-3xl md:text-4xl font-medium tracking-tight mt-3 mb-4">How it works</h2>
+        <p class="text-zinc-400 font-light max-w-lg mx-auto">Three easy steps to find, reserve, and enjoy your favorite cafés without the wait.</p>
+      </div>
+
+      <div class="grid md:grid-cols-3 gap-6">
+        <!-- Step 1 -->
+        <div class="glass-panel rounded-2xl p-8 hover:border-yellow-500/20 transition-all duration-300 group">
+          <div class="step-number w-10 h-10 rounded-full flex items-center justify-center text-[#09090b] text-sm font-semibold mb-6">1</div>
+          <h3 class="text-lg font-medium mb-3">Search & Discover</h3>
+          <p class="text-zinc-400 text-sm leading-relaxed">Browse cafés by location, vibe, coffee style, or amenities. Filter by what matters to you.</p>
+          <div class="mt-6 flex items-center gap-2 text-yellow-400 text-sm font-medium opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+            <span>Learn more</span>
+            <span class="iconify" data-icon="lucide:arrow-right"></span>
+          </div>
+        </div>
+        <!-- Step 2 -->
+        <div class="glass-panel rounded-2xl p-8 hover:border-yellow-500/20 transition-all duration-300 group">
+          <div class="step-number w-10 h-10 rounded-full flex items-center justify-center text-[#09090b] text-sm font-semibold mb-6">2</div>
+          <h3 class="text-lg font-medium mb-3">Reserve or Order</h3>
+          <p class="text-zinc-400 text-sm leading-relaxed">Book a table in seconds or place an order ahead. See real-time availability and menus.</p>
+          <div class="mt-6 flex items-center gap-2 text-yellow-400 text-sm font-medium opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+            <span>Learn more</span>
+            <span class="iconify" data-icon="lucide:arrow-right"></span>
+          </div>
+        </div>
+        <!-- Step 3 -->
+        <div class="glass-panel rounded-2xl p-8 hover:border-yellow-500/20 transition-all duration-300 group">
+          <div class="step-number w-10 h-10 rounded-full flex items-center justify-center text-[#09090b] text-sm font-semibold mb-6">3</div>
+          <h3 class="text-lg font-medium mb-3">Enjoy & Review</h3>
+          <p class="text-zinc-400 text-sm leading-relaxed">Show up to your reserved spot or pick up your order. Share your experience to help others.</p>
+          <div class="mt-6 flex items-center gap-2 text-yellow-400 text-sm font-medium opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+            <span>Learn more</span>
+            <span class="iconify" data-icon="lucide:arrow-right"></span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ FEATURED CAFÉS ============ -->
+  <section id="cafes" class="py-24 px-6">
+    <div class="max-w-7xl mx-auto">
+      <div class="flex flex-col md:flex-row md:items-end md:justify-between mb-12 gap-4">
+        <div>
+          <span class="text-yellow-400 text-xs font-medium uppercase tracking-widest">Curated Picks</span>
+          <h2 class="text-3xl md:text-4xl font-medium tracking-tight mt-3">Featured cafés</h2>
+        </div>
+        <!-- Filter Tabs -->
+        <div class="flex gap-2 flex-wrap">
+          <button onclick="filterCafes('all', this)" class="cafe-filter active-filter text-xs font-medium px-4 py-2 rounded-lg border border-white bg-white text-[#09090b] transition-all duration-150">All</button>
+          <button onclick="filterCafes('specialty', this)" class="cafe-filter text-xs font-medium px-4 py-2 rounded-lg border border-zinc-700 text-zinc-400 hover:text-white hover:border-zinc-500 transition-all duration-150">Specialty</button>
+          <button onclick="filterCafes('cozy', this)" class="cafe-filter text-xs font-medium px-4 py-2 rounded-lg border border-zinc-700 text-zinc-400 hover:text-white hover:border-zinc-500 transition-all duration-150">Cozy</button>
+          <button onclick="filterCafes('workspace', this)" class="cafe-filter text-xs font-medium px-4 py-2 rounded-lg border border-zinc-700 text-zinc-400 hover:text-white hover:border-zinc-500 transition-all duration-150">Workspace</button>
+        </div>
+      </div>
+
+      <!-- Café Grid -->
+      <div id="cafeGrid" class="grid md:grid-cols-3 gap-4">
+        <!-- Card 1 -->
+        <div class="cafe-card group relative rounded-2xl overflow-hidden cursor-pointer" data-category="specialty">
+          <div class="aspect-[4/5] overflow-hidden">
+            <img src="https://picsum.photos/seed/cafe-latte-art/600/750.jpg" alt="The Bean Theory" class="cafe-img w-full h-full object-cover opacity-60 transition-all duration-700">
+          </div>
+          <div class="absolute inset-0" style="background:linear-gradient(to top, #09090b, rgba(9,9,11,0.2), transparent);"></div>
+          <div class="absolute bottom-0 left-0 right-0 p-6">
+            <div class="flex items-center gap-2 mb-2">
+              <span class="text-yellow-400 text-xs">★ 4.9</span>
+              <span class="text-zinc-600 text-xs">•</span>
+              <span class="text-zinc-500 text-xs">Specialty</span>
+            </div>
+            <h3 class="cafe-title text-xl font-medium">The Bean Theory</h3>
+            <div class="flex items-center gap-1.5 mt-2 text-zinc-500 text-xs">
+              <span class="iconify" data-icon="lucide:map-pin"></span>
+              <span>Downtown, Portland</span>
+            </div>
+          </div>
+        </div>
+        <!-- Card 2 -->
+        <div class="cafe-card group relative rounded-2xl overflow-hidden cursor-pointer" data-category="cozy">
+          <div class="aspect-[4/5] overflow-hidden">
+            <img src="https://picsum.photos/seed/cozy-cafe-warm/600/750.jpg" alt="Hearth & Brew" class="cafe-img w-full h-full object-cover opacity-60 transition-all duration-700">
+          </div>
+          <div class="absolute inset-0" style="background:linear-gradient(to top, #09090b, rgba(9,9,11,0.2), transparent);"></div>
+          <div class="absolute bottom-0 left-0 right-0 p-6">
+            <div class="flex items-center gap-2 mb-2">
+              <span class="text-yellow-400 text-xs">★ 4.7</span>
+              <span class="text-zinc-600 text-xs">•</span>
+              <span class="text-zinc-500 text-xs">Cozy</span>
+            </div>
+            <h3 class="cafe-title text-xl font-medium">Hearth & Brew</h3>
+            <div class="flex items-center gap-1.5 mt-2 text-zinc-500 text-xs">
+              <span class="iconify" data-icon="lucide:map-pin"></span>
+              <span>East Village, New York</span>
+            </div>
+          </div>
+        </div>
+        <!-- Card 3 -->
+        <div class="cafe-card group relative rounded-2xl overflow-hidden cursor-pointer" data-category="workspace">
+          <div class="aspect-[4/5] overflow-hidden">
+            <img src="https://picsum.photos/seed/cafe-laptop-work/600/750.jpg" alt="Desk & Drip" class="cafe-img w-full h-full object-cover opacity-60 transition-all duration-700">
+          </div>
+          <div class="absolute inset-0" style="background:linear-gradient(to top, #09090b, rgba(9,9,11,0.2), transparent);"></div>
+          <div class="absolute bottom-0 left-0 right-0 p-6">
+            <div class="flex items-center gap-2 mb-2">
+              <span class="text-yellow-400 text-xs">★ 4.8</span>
+              <span class="text-zinc-600 text-xs">•</span>
+              <span class="text-zinc-500 text-xs">Workspace</span>
+            </div>
+            <h3 class="cafe-title text-xl font-medium">Desk & Drip</h3>
+            <div class="flex items-center gap-1.5 mt-2 text-zinc-500 text-xs">
+              <span class="iconify" data-icon="lucide:map-pin"></span>
+              <span>Mission District, SF</span>
+            </div>
+          </div>
+        </div>
+        <!-- Card 4 -->
+        <div class="cafe-card group relative rounded-2xl overflow-hidden cursor-pointer" data-category="specialty">
+          <div class="aspect-[4/5] overflow-hidden">
+            <img src="https://picsum.photos/seed/pour-over-coffee/600/750.jpg" alt="Slow Drip Co." class="cafe-img w-full h-full object-cover opacity-60 transition-all duration-700">
+          </div>
+          <div class="absolute inset-0" style="background:linear-gradient(to top, #09090b, rgba(9,9,11,0.2), transparent);"></div>
+          <div class="absolute bottom-0 left-0 right-0 p-6">
+            <div class="flex items-center gap-2 mb-2">
+              <span class="text-yellow-400 text-xs">★ 4.9</span>
+              <span class="text-zinc-600 text-xs">•</span>
+              <span class="text-zinc-500 text-xs">Specialty</span>
+            </div>
+            <h3 class="cafe-title text-xl font-medium">Slow Drip Co.</h3>
+            <div class="flex items-center gap-1.5 mt-2 text-zinc-500 text-xs">
+              <span class="iconify" data-icon="lucide:map-pin"></span>
+              <span>Capitol Hill, Seattle</span>
+            </div>
+          </div>
+        </div>
+        <!-- Card 5 -->
+        <div class="cafe-card group relative rounded-2xl overflow-hidden cursor-pointer" data-category="cozy">
+          <div class="aspect-[4/5] overflow-hidden">
+            <img src="https://picsum.photos/seed/warm-cafe-interior/600/750.jpg" alt="Cocoon Coffee" class="cafe-img w-full h-full object-cover opacity-60 transition-all duration-700">
+          </div>
+          <div class="absolute inset-0" style="background:linear-gradient(to top, #09090b, rgba(9,9,11,0.2), transparent);"></div>
+          <div class="absolute bottom-0 left-0 right-0 p-6">
+            <div class="flex items-center gap-2 mb-2">
+              <span class="text-yellow-400 text-xs">★ 4.6</span>
+              <span class="text-zinc-600 text-xs">•</span>
+              <span class="text-zinc-500 text-xs">Cozy</span>
+            </div>
+            <h3 class="cafe-title text-xl font-medium">Cocoon Coffee</h3>
+            <div class="flex items-center gap-1.5 mt-2 text-zinc-500 text-xs">
+              <span class="iconify" data-icon="lucide:map-pin"></span>
+              <span>Wicker Park, Chicago</span>
+            </div>
+          </div>
+        </div>
+        <!-- Card 6 -->
+        <div class="cafe-card group relative rounded-2xl overflow-hidden cursor-pointer" data-category="workspace">
+          <div class="aspect-[4/5] overflow-hidden">
+            <img src="https://picsum.photos/seed/modern-cafe-office/600/750.jpg" alt="The Grind Lab" class="cafe-img w-full h-full object-cover opacity-60 transition-all duration-700">
+          </div>
+          <div class="absolute inset-0" style="background:linear-gradient(to top, #09090b, rgba(9,9,11,0.2), transparent);"></div>
+          <div class="absolute bottom-0 left-0 right-0 p-6">
+            <div class="flex items-center gap-2 mb-2">
+              <span class="text-yellow-400 text-xs">★ 4.8</span>
+              <span class="text-zinc-600 text-xs">•</span>
+              <span class="text-zinc-500 text-xs">Workspace</span>
+            </div>
+            <h3 class="cafe-title text-xl font-medium">The Grind Lab</h3>
+            <div class="flex items-center gap-1.5 mt-2 text-zinc-500 text-xs">
+              <span class="iconify" data-icon="lucide:map-pin"></span>
+              <span>Silicon Hills, Austin</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ FOR CAFE OWNERS ============ -->
+  <section id="for-owners" class="py-24 px-6 relative overflow-hidden">
+    <div class="absolute top-1/2 left-0 w-[500px] h-[300px] bg-yellow-500/5 blur-[100px] rounded-full pointer-events-none -translate-y-1/2"></div>
+    <div class="max-w-7xl mx-auto grid md:grid-cols-2 gap-16 items-center relative z-10">
+      <!-- Left: Image -->
+      <div class="relative rounded-2xl overflow-hidden group">
+        <img src="https://picsum.photos/seed/barista-making-coffee/700/500.jpg" alt="Cafe owner" class="w-full h-80 md:h-[480px] object-cover rounded-2xl opacity-80 group-hover:scale-105 transition-transform duration-700">
+        <div class="absolute inset-0 rounded-2xl" style="background:linear-gradient(to top, #09090b 5%, transparent 60%);"></div>
+        <!-- Floating stat card -->
+        <div class="absolute bottom-6 left-6 glass-panel rounded-xl p-4 flex items-center gap-4">
+          <div class="w-10 h-10 rounded-full bg-yellow-500/10 flex items-center justify-center">
+            <span class="iconify text-yellow-400 text-lg" data-icon="lucide:trending-up"></span>
+          </div>
+          <div>
+            <div class="text-white text-sm font-medium">+42% more foot traffic</div>
+            <div class="text-zinc-500 text-xs">Average increase for listed cafés</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Right: Content -->
+      <div>
+        <span class="text-yellow-400 text-xs font-medium uppercase tracking-widest">For Café Owners</span>
+        <h2 class="text-3xl md:text-4xl font-medium tracking-tight mt-3 mb-6">Grow your café<br>with BrewLink</h2>
+        <p class="text-zinc-400 font-light leading-relaxed mb-8">Join 2,400+ cafés already using BrewLink to reach new customers, manage reservations, and streamline orders — all with zero upfront cost.</p>
+
+        <div class="space-y-5 mb-10">
+          <div class="flex items-start gap-4">
+            <div class="w-8 h-8 rounded-lg bg-zinc-800 flex items-center justify-center shrink-0 mt-0.5">
+              <span class="iconify text-yellow-400 text-sm" data-icon="lucide:calendar-check"></span>
+            </div>
+            <div>
+              <h4 class="text-sm font-medium mb-1">Smart Reservations</h4>
+              <p class="text-zinc-500 text-sm">Manage tables, set availability, and reduce no-shows with automated confirmations.</p>
+            </div>
+          </div>
+          <div class="flex items-start gap-4">
+            <div class="w-8 h-8 rounded-lg bg-zinc-800 flex items-center justify-center shrink-0 mt-0.5">
+              <span class="iconify text-yellow-400 text-sm" data-icon="lucide:smartphone"></span>
+            </div>
+            <div>
+              <h4 class="text-sm font-medium mb-1">Order Ahead Integration</h4>
+              <p class="text-zinc-500 text-sm">Let customers order before they arrive. Integrate with your existing POS system.</p>
+            </div>
+          </div>
+          <div class="flex items-start gap-4">
+            <div class="w-8 h-8 rounded-lg bg-zinc-800 flex items-center justify-center shrink-0 mt-0.5">
+              <span class="iconify text-yellow-400 text-sm" data-icon="lucide:bar-chart-3"></span>
+            </div>
+            <div>
+              <h4 class="text-sm font-medium mb-1">Analytics Dashboard</h4>
+              <p class="text-zinc-500 text-sm">Track visitors, popular items, peak hours, and customer satisfaction in real-time.</p>
+            </div>
+          </div>
+        </div>
+
+        <button onclick="openModal('signup')" class="bg-white text-[#09090b] text-sm font-medium px-6 py-3 rounded-xl hover:bg-zinc-200 transition-colors inline-flex items-center gap-2">
+          List your café — it's free
+          <span class="iconify" data-icon="lucide:arrow-right"></span>
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ TESTIMONIALS ============ -->
+  <section id="testimonials" class="py-24 px-6">
+    <div class="max-w-7xl mx-auto">
+      <div class="text-center mb-16">
+        <span class="text-yellow-400 text-xs font-medium uppercase tracking-widest">Testimonials</span>
+        <h2 class="text-3xl md:text-4xl font-medium tracking-tight mt-3 mb-4">Loved by coffee lovers</h2>
+        <p class="text-zinc-400 font-light max-w-lg mx-auto">See what our community has to say about their BrewLink experience.</p>
+      </div>
+
+      <div class="grid md:grid-cols-3 gap-6">
+        <!-- Testimonial 1 -->
+        <div class="glass-panel rounded-2xl p-8 hover:border-yellow-500/20 transition-all duration-300">
+          <div class="flex items-center gap-1 mb-4">
+            <span class="text-yellow-400 text-sm">★★★★★</span>
+          </div>
+          <p class="text-zinc-300 text-sm leading-relaxed mb-6">"I found my favorite café through BrewLink. The reserve-ahead feature saved me from a 30-minute wait on a Saturday morning. Absolute game changer."</p>
+          <div class="flex items-center gap-3">
+            <div class="w-10 h-10 rounded-full bg-zinc-800 flex items-center justify-center text-yellow-400 text-sm font-medium">SR</div>
+            <div>
+              <div class="text-sm font-medium">Sarah R.</div>
+              <div class="text-zinc-500 text-xs">Portland, OR</div>
+            </div>
+          </div>
+        </div>
+        <!-- Testimonial 2 -->
+        <div class="glass-panel rounded-2xl p-8 hover:border-yellow-500/20 transition-all duration-300">
+          <div class="flex items-center gap-1 mb-4">
+            <span class="text-yellow-400 text-sm">★★★★★</span>
+          </div>
+          <p class="text-zinc-300 text-sm leading-relaxed mb-6">"As a café owner, BrewLink brought in 200+ new customers in the first month. The analytics help me understand what my customers actually want."</p>
+          <div class="flex items-center gap-3">
+            <div class="w-10 h-10 rounded-full bg-zinc-800 flex items-center justify-center text-yellow-400 text-sm font-medium">MK</div>
+            <div>
+              <div class="text-sm font-medium">Marco K.</div>
+              <div class="text-zinc-500 text-xs">New York, NY</div>
+            </div>
+          </div>
+        </div>
+        <!-- Testimonial 3 -->
+        <div class="glass-panel rounded-2xl p-8 hover:border-yellow-500/20 transition-all duration-300">
+          <div class="flex items-center gap-1 mb-4">
+            <span class="text-yellow-400 text-sm">★★★★★</span>
+          </div>
+          <p class="text-zinc-300 text-sm leading-relaxed mb-6">"The workspace filter is brilliant. I can find cafés with fast WiFi, power outlets, and quiet zones. It's like having a portable office directory."</p>
+          <div class="flex items-center gap-3">
+            <div class="w-10 h-10 rounded-full bg-zinc-800 flex items-center justify-center text-yellow-400 text-sm font-medium">JL</div>
+            <div>
+              <div class="text-sm font-medium">Jamie L.</div>
+              <div class="text-zinc-500 text-xs">San Francisco, CA</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ CTA ============ -->
+  <section class="py-24 px-6">
+    <div class="max-w-3xl mx-auto text-center relative">
+      <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[300px] bg-yellow-500/5 blur-[100px] rounded-full pointer-events-none"></div>
+      <div class="relative z-10">
+        <span class="iconify text-yellow-400 text-4xl mb-6 inline-block" data-icon="lucide:coffee"></span>
+        <h2 class="text-3xl md:text-4xl font-medium tracking-tight mb-4">Ready to find your next<br>favorite café?</h2>
+        <p class="text-zinc-400 font-light max-w-md mx-auto mb-8">Join 180,000+ coffee lovers who use BrewLink every day. Free to sign up, no credit card required.</p>
+        <div class="flex flex-col sm:flex-row gap-3 justify-center">
+          <button onclick="openModal('signup')" class="bg-white text-[#09090b] text-sm font-medium px-8 py-3.5 rounded-xl hover:bg-zinc-200 transition-colors inline-flex items-center justify-center gap-2">
+            Get started free
+            <span class="iconify" data-icon="lucide:arrow-right"></span>
+          </button>
+          <button onclick="openModal('owner')" class="border border-zinc-700 text-zinc-300 text-sm font-medium px-8 py-3.5 rounded-xl hover:border-zinc-500 hover:text-white transition-colors inline-flex items-center justify-center gap-2">
+            <span class="iconify" data-icon="lucide:store"></span>
+            I'm a café owner
+          </button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ FOOTER ============ -->
+  <footer class="border-t border-zinc-800/50 py-16 px-6">
+    <div class="max-w-7xl mx-auto">
+      <div class="grid grid-cols-2 md:grid-cols-5 gap-8 mb-12">
+        <!-- Brand -->
+        <div class="col-span-2 md:col-span-1">
+          <a href="#" class="flex items-center gap-2 mb-4">
+            <span class="iconify text-yellow-400 text-xl" data-icon="lucide:coffee"></span>
+            <span class="text-white font-semibold tracking-tight">BrewLink</span>
+          </a>
+          <p class="text-zinc-500 text-sm leading-relaxed">Connecting coffee lovers with the cafés they'll love.</p>
+        </div>
+        <!-- Product -->
+        <div>
+          <h4 class="text-xs font-medium uppercase tracking-widest text-zinc-400 mb-4">Product</h4>
+          <ul class="space-y-2.5">
+            <li><a href="#cafes" class="text-zinc-500 text-sm hover:text-white transition-colors">Explore</a></li>
+            <li><a href="#how-it-works" class="text-zinc-500 text-sm hover:text-white transition-colors">How It Works</a></li>
+            <li><a href="#" class="text-zinc-500 text-sm hover:text-white transition-colors">Mobile App</a></li>
+            <li><a href="#" class="text-zinc-500 text-sm hover:text-white transition-colors">Pricing</a></li>
+          </ul>
+        </div>
+        <!-- Company -->
+        <div>
+          <h4 class="text-xs font-medium uppercase tracking-widest text-zinc-400 mb-4">Company</h4>
+          <ul class="space-y-2.5">
+            <li><a href="#" class="text-zinc-500 text-sm hover:text-white transition-colors">About</a></li>
+            <li><a href="#" class="text-zinc-500 text-sm hover:text-white transition-colors">Blog</a></li>
+            <li><a href="#" class="text-zinc-500 text-sm hover:text-white transition-colors">Careers</a></li>
+            <li><a href="#" class="text-zinc-500 text-sm hover:text-white transition-colors">Press</a></li>
+          </ul>
+        </div>
+        <!-- Support -->
+        <div>
+          <h4 class="text-xs font-medium uppercase tracking-widest text-zinc-400 mb-4">Support</h4>
+          <ul class="space-y-2.5">
+            <li><a href="#" class="text-zinc-500 text-sm hover:text-white transition-colors">Help Center</a></li>
+            <li><a href="#" class="text-zinc-500 text-sm hover:text-white transition-colors">Contact</a></li>
+            <li><a href="#" class="text-zinc-500 text-sm hover:text-white transition-colors">Privacy</a></li>
+            <li><a href="#" class="text-zinc-500 text-sm hover:text-white transition-colors">Terms</a></li>
+          </ul>
+        </div>
+        <!-- Social -->
+        <div>
+          <h4 class="text-xs font-medium uppercase tracking-widest text-zinc-400 mb-4">Follow Us</h4>
+          <div class="flex gap-3">
+            <a href="#" class="w-9 h-9 rounded-lg bg-zinc-900 border border-zinc-800 flex items-center justify-center text-zinc-500 hover:text-white hover:border-zinc-700 transition-all">
+              <span class="iconify text-sm" data-icon="lucide:instagram"></span>
+            </a>
+            <a href="#" class="w-9 h-9 rounded-lg bg-zinc-900 border border-zinc-800 flex items-center justify-center text-zinc-500 hover:text-white hover:border-zinc-700 transition-all">
+              <span class="iconify text-sm" data-icon="lucide:twitter"></span>
+            </a>
+            <a href="#" class="w-9 h-9 rounded-lg bg-zinc-900 border border-zinc-800 flex items-center justify-center text-zinc-500 hover:text-white hover:border-zinc-700 transition-all">
+              <span class="iconify text-sm" data-icon="lucide:facebook"></span>
+            </a>
+          </div>
+        </div>
+      </div>
+      <div class="border-t border-zinc-800/50 pt-8 flex flex-col md:flex-row items-center justify-between gap-4">
+        <p class="text-zinc-600 text-xs">© 2025 BrewLink. All rights reserved.</p>
+        <p class="text-zinc-700 text-xs">Made with <span class="text-yellow-500">♥</span> for coffee lovers everywhere</p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- ============ MODAL ============ -->
+  <div id="modal" class="fixed inset-0 z-[60] hidden items-center justify-center p-4" style="background:rgba(0,0,0,0.7);backdrop-filter:blur(4px);">
+    <div class="glass-panel rounded-2xl p-8 w-full max-w-md relative" onclick="event.stopPropagation()">
+      <button onclick="closeModal()" class="absolute top-4 right-4 text-zinc-500 hover:text-white transition-colors">
+        <span class="iconify text-xl" data-icon="lucide:x"></span>
+      </button>
+
+      <!-- Login Form -->
+      <div id="form-login">
+        <h3 class="text-xl font-medium mb-1">Welcome back</h3>
+        <p class="text-zinc-500 text-sm mb-6">Log in to your BrewLink account</p>
+        <div class="space-y-4">
+          <div>
+            <label class="text-xs text-zinc-400 mb-1.5 block">Email</label>
+            <input type="email" placeholder="you@example.com" class="w-full bg-zinc-900/50 border border-zinc-800 rounded-lg px-4 py-3 text-sm text-white placeholder-zinc-600 focus:outline-none focus:border-yellow-500/50 transition-colors">
+          </div>
+          <div>
+            <label class="text-xs text-zinc-400 mb-1.5 block">Password</label>
+            <input type="password" placeholder="••••••••" class="w-full bg-zinc-900/50 border border-zinc-800 rounded-lg px-4 py-3 text-sm text-white placeholder-zinc-600 focus:outline-none focus:border-yellow-500/50 transition-colors">
+          </div>
+          <button onclick="handleFormSubmit('login')" class="w-full bg-white text-[#09090b] text-sm font-medium py-3 rounded-lg hover:bg-zinc-200 transition-colors">Log In</button>
+        </div>
+        <p class="text-zinc-500 text-xs text-center mt-4">Don't have an account? <button onclick="switchForm('signup')" class="text-yellow-400 hover:underline">Sign up</button></p>
+      </div>
+
+      <!-- Signup Form -->
+      <div id="form-signup" class="hidden">
+        <h3 class="text-xl font-medium mb-1">Create your account</h3>
+        <p class="text-zinc-500 text-sm mb-6">Join 180K+ coffee lovers for free</p>
+        <div class="space-y-4">
+          <div>
+            <label class="text-xs text-zinc-400 mb-1.5 block">Full Name</label>
+            <input type="text" placeholder="Jane Doe" class="w-full bg-zinc-900/50 border border-zinc-800 rounded-lg px-4 py-3 text-sm text-white placeholder-zinc-600 focus:outline-none focus:border-yellow-500/50 transition-colors">
+          </div>
+          <div>
+            <label class="text-xs text-zinc-400 mb-1.5 block">Email</label>
+            <input type="email" placeholder="you@example.com" class="w-full bg-zinc-900/50 border border-zinc-800 rounded-lg px-4 py-3 text-sm text-white placeholder-zinc-600 focus:outline-none focus:border-yellow-500/50 transition-colors">
+          </div>
+          <div>
+            <label class="text-xs text-zinc-400 mb-1.5 block">Password</label>
+            <input type="password" placeholder="Min. 8 characters" class="w-full bg-zinc-900/50 border border-zinc-800 rounded-lg px-4 py-3 text-sm text-white placeholder-zinc-600 focus:outline-none focus:border-yellow-500/50 transition-colors">
+          </div>
+          <button onclick="handleFormSubmit('signup')" class="w-full bg-white text-[#09090b] text-sm font-medium py-3 rounded-lg hover:bg-zinc-200 transition-colors">Create Account</button>
+        </div>
+        <p class="text-zinc-500 text-xs text-center mt-4">Already have an account? <button onclick="switchForm('login')" class="text-yellow-400 hover:underline">Log in</button></p>
+      </div>
+
+      <!-- Owner Form -->
+      <div id="form-owner" class="hidden">
+        <h3 class="text-xl font-medium mb-1">List your café</h3>
+        <p class="text-zinc-500 text-sm mb-6">Start reaching new customers today</p>
+        <div class="space-y-4">
+          <div>
+            <label class="text-xs text-zinc-400 mb-1.5 block">Café Name</label>
+            <input type="text" placeholder="My Amazing Café" class="w-full bg-zinc-900/50 border border-zinc-800 rounded-lg px-4 py-3 text-sm text-white placeholder-zinc-600 focus:outline-none focus:border-yellow-500/50 transition-colors">
+          </div>
+          <div>
+            <label class="text-xs text-zinc-400 mb-1.5 block">Your Email</label>
+            <input type="email" placeholder="owner@cafe.com" class="w-full bg-zinc-900/50 border border-zinc-800 rounded-lg px-4 py-3 text-sm text-white placeholder-zinc-600 focus:outline-none focus:border-yellow-500/50 transition-colors">
+          </div>
+          <div>
+            <label class="text-xs text-zinc-400 mb-1.5 block">City</label>
+            <input type="text" placeholder="New York" class="w-full bg-zinc-900/50 border border-zinc-800 rounded-lg px-4 py-3 text-sm text-white placeholder-zinc-600 focus:outline-none focus:border-yellow-500/50 transition-colors">
+          </div>
+          <button onclick="handleFormSubmit('owner')" class="w-full bg-white text-[#09090b] text-sm font-medium py-3 rounded-lg hover:bg-zinc-200 transition-colors">Submit Application</button>
+        </div>
+        <p class="text-zinc-500 text-xs text-center mt-4">No credit card required · Free to list</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ TOAST ============ -->
+  <div id="toast" class="fixed bottom-6 right-6 z-[70] hidden">
+    <div class="glass-panel rounded-xl px-5 py-3.5 flex items-center gap-3 border-green-500/20">
+      <span class="iconify text-green-400" data-icon="lucide:check-circle"></span>
+      <span id="toastMsg" class="text-sm text-zinc-200"></span>
+    </div>
+  </div>
+
+  <!-- ============ SCRIPTS ============ -->
+  <script>
+    // Mobile menu
+    function toggleMobile() {
+      const menu = document.getElementById('mobileMenu');
+      const icon = document.getElementById('menuIcon');
+      menu.classList.toggle('hidden');
+      menu.classList.toggle('flex');
+      if (menu.classList.contains('flex')) {
+        icon.setAttribute('data-icon', 'lucide:x');
+        document.body.style.overflow = 'hidden';
+      } else {
+        icon.setAttribute('data-icon', 'lucide:menu');
+        document.body.style.overflow = '';
+      }
+    }
+
+    // Modal
+    function openModal(type) {
+      const modal = document.getElementById('modal');
+      modal.classList.remove('hidden');
+      modal.classList.add('flex');
+      document.body.style.overflow = 'hidden';
+      switchForm(type);
+    }
+
+    function closeModal() {
+      const modal = document.getElementById('modal');
+      modal.classList.add('hidden');
+      modal.classList.remove('flex');
+      document.body.style.overflow = '';
+    }
+
+    document.getElementById('modal').addEventListener('click', function(e) {
+      if (e.target === this) closeModal();
+    });
+
+    function switchForm(type) {
+      document.getElementById('form-login').classList.add('hidden');
+      document.getElementById('form-signup').classList.add('hidden');
+      document.getElementById('form-owner').classList.add('hidden');
+      document.getElementById('form-' + type).classList.remove('hidden');
+    }
+
+    // Form submit
+    function handleFormSubmit(type) {
+      const messages = {
+        login: 'Logged in successfully!',
+        signup: 'Account created! Welcome aboard ☕',
+        owner: 'Application submitted! We\'ll be in touch soon.'
+      };
+      closeModal();
+      showToast(messages[type]);
+    }
+
+    // Toast
+    function showToast(msg) {
+      const toast = document.getElementById('toast');
+      document.getElementById('toastMsg').textContent = msg;
+      toast.classList.remove('hidden');
+      setTimeout(() => toast.classList.add('hidden'), 3500);
+    }
+
+    // Search
+    function handleSearch() {
+      const val = document.getElementById('heroSearch').value.trim();
+      const fb = document.getElementById('searchFeedback');
+      if (!val) {
+        fb.innerHTML = '<p class="text-yellow-400/80 text-sm flex items-center gap-2 justify-center"><span class="iconify" data-icon="lucide:info"></span>Please enter a city or neighborhood to search.</p>';
+        fb.classList.remove('hidden');
+        return;
+      }
+      fb.innerHTML = `<p class="text-zinc-300 text-sm flex items-center gap-2 justify-center"><span class="iconify text-green-400" data-icon="lucide:check-circle"></span>Showing cafés near <strong class="text-white">${val}</strong> — scroll down to explore!</p>`;
+      fb.classList.remove('hidden');
+      document.getElementById('cafes').scrollIntoView({ behavior: 'smooth' });
+    }
+
+    document.getElementById('heroSearch').addEventListener('keydown', function(e) {
+      if (e.key === 'Enter') handleSearch();
+    });
+
+    // Cafe filter
+    function filterCafes(category, btn) {
+      // Update button states
+      document.querySelectorAll('.cafe-filter').forEach(b => {
+        b.classList.remove('active-filter', 'bg-white', 'text-[#09090b]', 'border-white');
+        b.classList.add('border-zinc-700', 'text-zinc-400');
+      });
+      btn.classList.add('active-filter', 'bg-white', 'text-[#09090b]', 'border-white');
+      btn.classList.remove('border-zinc-700', 'text-zinc-400');
+
+      // Filter cards
+      const cards = document.querySelectorAll('.cafe-card');
+      cards.forEach(card => {
+        if (category === 'all' || card.dataset.category === category) {
+          card.style.display = '';
+          card.style.opacity = '0';
+          card.style.transform = 'translateY(12px)';
+          setTimeout(() => {
+            card.style.transition = 'opacity 400ms ease, transform 400ms ease';
+            card.style.opacity = '1';
+            card.style.transform = 'translateY(0)';
+          }, 50);
+        } else {
+          card.style.display = 'none';
+        }
+      });
+    }
+
+    // Navbar scroll effect
+    window.addEventListener('scroll', function() {
+      const nav = document.getElementById('navbar');
+      if (window.scrollY > 50) {
+        nav.style.borderBottomColor = 'rgba(255,255,255,0.08)';
+      } else {
+        nav.style.borderBottomColor = 'rgba(255,255,255,0.05)';
+      }
+    });
+
+    // Escape key closes modal
+    document.addEventListener('keydown', function(e) {
+      if (e.key === 'Escape') {
+        closeModal();
+        const menu = document.getElementById('mobileMenu');
+        if (menu.classList.contains('flex')) toggleMobile();
+      }
+    });
+  </script>
+</body>
+</html>
